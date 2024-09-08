@@ -3,7 +3,7 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
-const db = require('./config/db.config');
+const db = require('./db_config/config');
 
 // Middleware
 app.use(express.json());
@@ -16,6 +16,9 @@ app.get('/', (req, res) => {
 
 // Routes (You will define these later)
 app.use('/api/users', require('./routes/user.routes'));
+
+// Rutas de asesores
+app.use('/api/asesores', require('./routes/asesor.routes'));
 
 // Start the server
 app.listen(port, () => {
