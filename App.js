@@ -1,10 +1,13 @@
 import { StatusBar } from 'expo-status-bar'; //barra superior de hora y bateria, se utiliza con estilo automatico (black/white)
 import React from 'react'; //por default hay que tenerlo
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'; //nos permite crear la función y guardarla en la variable styles
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import RecuperarClave from './ventanas/RecuperarClave';
 
-//div = view
+const Stack = createStackNavigator();
 
-export default function App() {
+function Inicio({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Bienvenido</Text>
@@ -18,13 +21,26 @@ export default function App() {
         style={styles.texto_inputs}
         secureTextEntry={true}
       />
-      <Text style={styles.olvidaste_contraseña}>Olvidaste tu contraseña</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('RecuperarClave')}>
+        <Text style={styles.olvidaste_contraseña}>Olvidaste tu contraseña</Text>
+      </TouchableOpacity>
       <Text style={styles.olvidaste_contraseña}>¿No tienes una cuenta?</Text>
       <StatusBar style="auto" /> 
       <TouchableOpacity style={styles.boton}>
         <Text style={{fontSize: 17, fontWeight: '400', color: 'grey', fontFamily: 'System',}}>Ingresar</Text>
       </TouchableOpacity>
     </View>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={Inicio} options={{ headerShown: false }}/>
+        <Stack.Screen name="RecuperarClave" component={RecuperarClave} options={{ headerShown: false }}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
