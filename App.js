@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import RecuperarClave from './ventanas/RecuperarClave';
 import CrearCuenta from './ventanas/CrearCuenta';
+import HomeMenu from './ventanas/HomeMenu';
 
 const Stack = createStackNavigator();
 
@@ -27,10 +28,10 @@ function Inicio({ navigation }) {
         <Text style={styles.olvidaste_contraseña}>Olvidaste tu contraseña</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('CrearCuenta')}>
-        <Text style={styles.olvidaste_contraseña}>¿No tienes una cuenta?</Text>
+        <Text style={styles.olvidaste_contraseña}>¿No tienes una cuenta? Registrate.</Text>
       </TouchableOpacity>
       <StatusBar style="auto" /> 
-      <TouchableOpacity style={styles.boton}>
+      <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate('HomeMenu')}>
         <Text style={{fontSize: 17, fontWeight: '400', color: 'grey', fontFamily: 'System',}}>Ingresar</Text>
       </TouchableOpacity>
     </View>
@@ -44,6 +45,7 @@ export default function App() {
         <Stack.Screen name="Home" component={Inicio} options={{ headerShown: false }}/>
         <Stack.Screen name="RecuperarClave" component={RecuperarClave} options={{ headerShown: false }}/>
         <Stack.Screen name='CrearCuenta' component={CrearCuenta} options={{ headerShown: false }}/>
+        <Stack.Screen name='HomeMenu' component={HomeMenu} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -97,7 +99,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 10,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    marginTop: 30
   },
 
 

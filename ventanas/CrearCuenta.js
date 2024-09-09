@@ -1,4 +1,3 @@
-// screens/RecuperarContraseña.js
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 
@@ -7,7 +6,11 @@ export default function CrearCuenta({ navigation }) {
       <View style={styles.container}>
         <Text style={styles.titulo}>Crear una cuenta</Text>
         <TextInput 
-          placeholder='Nombre completo'
+          placeholder='Nombre'
+          style={styles.texto_inputs}
+        />
+        <TextInput
+          placeholder='Apellido'
           style={styles.texto_inputs}
         />
         <TextInput 
@@ -17,12 +20,10 @@ export default function CrearCuenta({ navigation }) {
         <TextInput 
           placeholder='Contraseña'
           style={styles.texto_inputs}
-          secureTextEntry={true}
         />
         <TextInput 
           placeholder='Confirmar contraseña'
           style={styles.texto_inputs}
-          secureTextEntry={true}
         />
         <TouchableOpacity style={styles.boton}>
           <Text style={{fontSize: 17, fontWeight: '400', color: 'grey', fontFamily: 'System',}}>Crear cuenta</Text>
@@ -66,7 +67,8 @@ export default function CrearCuenta({ navigation }) {
       alignItems: 'center',
       justifyContent: 'center',
       marginVertical: 10,
-      backgroundColor: 'white'
+      backgroundColor: 'white',
+      marginTop: 100,
     },
     volver: {
       fontSize: 14,
