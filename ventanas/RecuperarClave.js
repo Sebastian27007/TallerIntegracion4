@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 
-export default function RecuperarClave() {
+export default function RecuperarClave({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Recuperar Contraseña</Text>

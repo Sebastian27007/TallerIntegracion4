@@ -3,22 +3,16 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 
 //ventanas
-import HomeMenu from './ventanas/HomeMenu';
+import Home from './ventanas/Home';
+import Settings from './ventanas/Settings'
 
 const Tab = createBottomTabNavigator();
 
-function MisTabs() {
-  return (
-    <Tab.Navigator>
-        <Tab.Screen name='HomeMenu' component={HomeMenu} />
-    </Tab.Navigator>
-  );
-}
-
-export default function Navigator() {
+export default function MyTabs() {
     return (
-        <NavigationContainer>
-            <MisTabs />
-        </NavigationContainer>
+        <Tab.Navigator>
+          <Tab.Screen name='Home' component={Home}></Tab.Screen>
+          <Tab.Screen name='Settings' component={Settings}></Tab.Screen>
+        </Tab.Navigator>
     );
 }
