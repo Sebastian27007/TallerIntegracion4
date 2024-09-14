@@ -20,6 +20,8 @@ app.use('/api/users', require('./routes/user.routes'));
 // Rutas de asesores
 app.use('/api/asesores', require('./routes/asesor.routes'));
 
+app.use('/api', require('./routes/Medico.routes'));
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server funcionando en el puerto: ${port}`);

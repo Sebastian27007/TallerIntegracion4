@@ -1,20 +1,13 @@
 // api/config/db.config.js
+const mariadb = require('mariadb');
+require('dotenv').config();
 
-const mysql = require('mysql2');
-
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'aplicaciondocentecentro'
+const pool = mariadb.createPool({
+  host: process.env.DB_HOST, // Dirección de tu servidor de base de datos
+  user: process.env.DB_USER, // Tu usuario
+  password: process.env.DB_PASSWORD, // Tu contraseña
+  database: process.env.DB_NAME, // Nombre de la base de datos
+  connectionLimit: 8 // Límite de conexiones
 });
 
-connection.connect((err) => {
-  if (err) {
-    console.error('Error connecting to the database:', err);
-    return;
-  }
-  console.log('Connected to the MySQL database');
-});
-
-module.exports = connection;
+module.exports = pool;
