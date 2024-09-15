@@ -5,7 +5,7 @@ import { StatusBar } from "expo-status-bar";
 export default function Login({ navigation }) {
     return (
       <View style={styles.container}>
-        <Image source={require('./logo.png')} style={styles.logo} />
+        <Image source={require('../logo.png')} style={styles.logo} />
         <Text style={styles.titulo}>Bienvenido</Text>
         <Text style={styles.subtitulo}>Accede a tu cuenta</Text>
         <TextInput 

@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const Settings = () => {
+const Solicitar = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Configuración de la cuenta</Text>
+      <Text style={styles.text}>Solicitar horas medicas</Text>
     </View>
   );
 };
@@ -19,8 +19,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     color: '#333',
-    fontFamily: 'System'
   },
 });
 
-export default Settings;
+export default Solicitar;
