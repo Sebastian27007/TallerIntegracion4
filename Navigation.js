@@ -12,6 +12,7 @@ import Settings from './ventanas/Settings'
 import Solicitar from './ventanas/SolicitarHora';
 import CitasAgendadas from './ventanas/ST_CitasAgentadas';
 import ReprogramarHora from './ventanas/ST_ReprogramarHora';
+import Cancelar from './ventanas/ST_CancelarHoras';
 
 //STACK
 const HomeStackNavigator = createStackNavigator();
@@ -32,6 +33,10 @@ function MyStack() {
         name='Reprogramar horas agendadas'
         component={ReprogramarHora}
       />
+      <HomeStackNavigator.Screen
+        name='Cancelar hora medica agendada'
+        component={Cancelar}
+      />
     </HomeStackNavigator.Navigator>
   )
 }
@@ -43,7 +48,7 @@ export default function MyTabs() {
     return (
         <Tab.Navigator initialRouteName='Home'>
           <Tab.Screen 
-            name='Home' 
+            name='GetMed' 
             component={MyStack} 
             options={{ 
               tabBarLabel: 'Inicio',
@@ -60,6 +65,7 @@ export default function MyTabs() {
             options={{
               tabBarLabel: 'Agendar',
               tabBarIcon: () => (<Entypo name="clipboard" size={24} color="black" />),
+              headerShown: false,
             }}>
           </Tab.Screen>
 

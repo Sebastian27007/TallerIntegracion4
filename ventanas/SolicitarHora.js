@@ -24,58 +24,88 @@ const Solicitar = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Solicitar horas médicas</Text>
-
-      {/* Selector de especialidades */}
-      <Picker
-        selectedValue={especialidad}
-        style={styles.picker}
-        onValueChange={handleEspecialidadChange}
-      >
-        <Picker.Item label="Seleccione una especialidad" value="" />
-        <Picker.Item label="Medicina Interna" value="Medicina Interna" />
-        <Picker.Item label="Dermatología" value="Dermatología" />
-        <Picker.Item label="Pediatría" value="Pediatría" />
-        <Picker.Item label="Cardiología" value="Cardiología" />
-        <Picker.Item label="Ginecología" value="Ginecología" />
-        <Picker.Item label="Oftalmología" value="Oftalmología" />
-      </Picker>
-
-      {especialidadTexto ? (
-        <Text style={styles.selectedText}>Especialidad seleccionada: {especialidadTexto}</Text>
-      ) : (
-        <Text style={styles.selectedText}>No ha seleccionado ninguna especialidad</Text>
-      )}
-
-      <View style={styles.dateContainer}>
-        <Button title="Seleccionar fecha" onPress={() => setMostrarFecha(true)} />
-        <Text style={styles.selectedText}>Fecha seleccionada: {fecha.toLocaleDateString()}</Text>
+      
+      {/* Sección superior (2/6) */}
+      <View style={styles.topContainer}>
+        <Text style={styles.title}>Solicitar horas médicas</Text>
+        <Text style={styles.subtitle}>Selecciona la especialidad de nuestros profesionales</Text>
       </View>
 
-      {mostrarFecha && (
-        <DateTimePicker
-          value={fecha}
-          mode="date"
-          display="default"
-          onChange={onChangeFecha}
-        />
-      )}
+      {/* Sección inferior (4/6) */}
+      <View style={styles.bottomContainer}>
+        {/* Selector de especialidades */}
+        <Picker
+          selectedValue={especialidad}
+          style={styles.picker}
+          onValueChange={handleEspecialidadChange}
+        >
+          <Picker.Item label="Seleccione una especialidad" value="" />
+          <Picker.Item label="Medicina Interna" value="Medicina Interna" />
+          <Picker.Item label="Dermatología" value="Dermatología" />
+          <Picker.Item label="Pediatría" value="Pediatría" />
+          <Picker.Item label="Cardiología" value="Cardiología" />
+          <Picker.Item label="Ginecología" value="Ginecología" />
+          <Picker.Item label="Oftalmología" value="Oftalmología" />
+        </Picker>
+
+        {especialidadTexto ? (
+          <Text style={styles.selectedText}>Especialidad seleccionada: {especialidadTexto}</Text>
+        ) : (
+          <Text style={styles.selectedText}>No ha seleccionado ninguna especialidad</Text>
+        )}
+
+        {/* Selector de fecha */}
+        <View style={styles.dateContainer}>
+          <Button title="Seleccionar fecha" onPress={() => setMostrarFecha(true)} />
+          <Text style={styles.selectedText}>Fecha seleccionada: {fecha.toLocaleDateString()}</Text>
+        </View>
+
+        {mostrarFecha && (
+          <DateTimePicker
+            value={fecha}
+            mode="date"
+            display="default"
+            onChange={onChangeFecha}
+          />
+        )}
+      </View>
     </View>
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
     backgroundColor: '#f8f8f8',
-    padding: 16,
   },
-  text: {
-    fontSize: 20,
-    color: '#333',
-    marginBottom: 20,
+  /* Sección superior (2/6) */
+  topContainer: {
+    flex: 2,
+    backgroundColor: '#49daee',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: 'white',
+    marginTop: 10,
+    textAlign: 'center',
+  },
+  
+  /* Sección inferior (4/6) */
+  bottomContainer: {
+    flex: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
   },
   picker: {
     height: 50,
@@ -86,6 +116,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#555',
     marginTop: 10,
+    textAlign: 'center',
   },
   dateContainer: {
     marginTop: 30,
