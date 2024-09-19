@@ -1,29 +1,54 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default function Home({ navigation }) {
+const Home = () => {
+  const navigation = useNavigation();
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Pantalla de Inicio (Home)</Text>
-      <Text style={styles.subtitle}>Bienvenido a la pantalla principal</Text>
+    <View>
+
+      <TouchableOpacity 
+      style = {{
+        backgroundColor: "green",
+        padding: 10,
+        marginTop: 100,
+        width: "50%",
+        alignSelf: "center",
+        borderRadius: 10,
+      }}
+      onPress={() => navigation.navigate('Citas medicas agendadas')}>
+        <Text
+          style = {{
+            fontSize: 15,
+            textAlign: "center",
+            color: "white",
+          }}
+        >Ver citas medicas agendadas</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity 
+      style = {{
+        backgroundColor: "green",
+        padding: 10,
+        marginTop: 100,
+        width: "50%",
+        alignSelf: "center",
+        borderRadius: 10,
+      }}
+      onPress={() => navigation.navigate('Reprogramar horas agendadas')}>
+        <Text
+          style = {{
+            fontSize: 15,
+            textAlign: "center",
+            color: "white",
+          }}
+        >Reprogramar horas agendadas</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  subtitle: {
-    fontSize: 18,
-    color: 'gray',
-  },
-});
+export default Home;

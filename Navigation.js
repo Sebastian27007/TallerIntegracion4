@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from "@react-navigation/stack";
 
 //iconos
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -10,7 +10,33 @@ import Entypo from '@expo/vector-icons/Entypo';
 import Home from './ventanas/Home';
 import Settings from './ventanas/Settings'
 import Solicitar from './ventanas/SolicitarHora';
+import CitasAgendadas from './ventanas/ST_CitasAgentadas';
+import ReprogramarHora from './ventanas/ST_ReprogramarHora';
 
+//STACK
+const HomeStackNavigator = createStackNavigator();
+
+function MyStack() {
+  return (
+    <HomeStackNavigator.Navigator initialRouteName='Home'>
+      <HomeStackNavigator.Screen
+        name='Home'
+        component={Home}
+        options={{ headerShown: false }}
+      />
+      <HomeStackNavigator.Screen
+        name="Citas medicas agendadas"
+        component={CitasAgendadas}
+      />
+      <HomeStackNavigator.Screen
+        name='Reprogramar horas agendadas'
+        component={ReprogramarHora}
+      />
+    </HomeStackNavigator.Navigator>
+  )
+}
+
+//TAB
 const Tab = createBottomTabNavigator();
 
 export default function MyTabs() {
@@ -18,7 +44,7 @@ export default function MyTabs() {
         <Tab.Navigator initialRouteName='Home'>
           <Tab.Screen 
             name='Home' 
-            component={Home} 
+            component={MyStack} 
             options={{ 
               tabBarLabel: 'Inicio',
               tabBarIcon: () => (
@@ -27,6 +53,7 @@ export default function MyTabs() {
               headerShown: false,
             }}> 
           </Tab.Screen>
+
           <Tab.Screen
             name='Agendar Horas medicas'
             component={Solicitar}
@@ -35,6 +62,7 @@ export default function MyTabs() {
               tabBarIcon: () => (<Entypo name="clipboard" size={24} color="black" />),
             }}>
           </Tab.Screen>
+
           <Tab.Screen 
             name='Configuración de cuenta' 
             component={Settings} 
