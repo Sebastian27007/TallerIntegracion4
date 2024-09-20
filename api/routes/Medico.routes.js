@@ -12,4 +12,14 @@ router.get('/reserva', medico.findHorariosWithReservas);
 
 router.post('/reservarhora', crearReserva)
 
+router.delete('/borrarhora', medico.eliminarReservaDinamica);
+
+router.post('/nuevoUsuario', medico.nuevoUsuario);
+
+router.delete('/eliminarUsuario', medico.eliminarUsuario);
+
+router.put('/actualizarCredenciales', medico.actualizarCredenciales);
+
+router.put('/CambiodeHora', medico.SolicitarcambioHora);
+
 module.exports = router;
