@@ -7,6 +7,7 @@ Obligario para ejecutar
 1- NPM install
 2.-npm install express mysql2 cors
 3.-  node .\conexiondirecta.js
+3.1.- npm install cors
 4. Probar las rutas de la API
 
 http://localhost:3306/ - Verás el mensaje "Bienvenido a la API de getmed".
