@@ -1,26 +1,31 @@
 // api/index.js
-
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
 const db = require('./db_config/config');
-
+const medico = require('./routes/Medico.routes')
+const { authenticateToken } = require('./middlewares/auth.middlewares');
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Simple route for testing
+//Ejemplo de Rutas
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-// Routes (You will define these later)
 app.use('/api/users', require('./routes/user.routes'));
 
-// Rutas de asesores
+// Rutas de asesores (testeo local)
 app.use('/api/asesores', require('./routes/asesor.routes'));
 
-app.use('/api', require('./routes/Medico.routes'));
+app.use('/auth', medico);
+
+
+// Rutas protegidas (ejemplo)
+app.get('/protected', authenticateToken, (req, res) => {
+  res.json({ message: `Bienvenido, tu RUT es: ${req.user.rut}` });
+});
 
 // Start the server
 app.listen(port, () => {
