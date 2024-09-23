@@ -7,8 +7,8 @@ export default function Login({ navigation }) {
     return (
       <View style={styles.container}>
         <View style={styles.upperSection}>
-        <Image source={require('../logo.png')} style={styles.logo} />
-        <Text style={styles.titulo}>Bienvenido</Text>
+          <Image source={require('../logo.png')} style={styles.logo} />
+          <Text style={styles.titulo}>Bienvenido</Text>
         </View>
 
         <View style={styles.lowerSection}>
@@ -34,11 +34,16 @@ export default function Login({ navigation }) {
             <Text style={styles.olvidaste_contraseña}>Olvidaste tu contraseña</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('CrearCuenta')}>
-            <Text style={styles.olvidaste_contraseña}>¿No tienes una cuenta? Registrate.</Text>
+            <Text style={styles.olvidaste_contraseña}>¿No tienes una cuenta? Regístrate.</Text>
           </TouchableOpacity>
           <StatusBar style="auto" /> 
           <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate('Navigation')}>
             <Text style={{fontSize: 17, fontWeight: '400', color: 'grey', fontFamily: 'System',}}>Ingresar</Text>
+          </TouchableOpacity>
+          
+          {/* New button to navigate to Tablas */}
+          <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate('Tablas')}>
+            <Text style={{fontSize: 17, fontWeight: '400', color: 'grey', fontFamily: 'System',}}>Ir a Tablas</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -57,16 +62,15 @@ const styles = StyleSheet.create({
     },
     lowerSection: {
       flex: 3, 
-    backgroundColor: '#f1f1f1',
-    alignItems: 'center',
-    justifyContent: 'center',
-    justifyContent: 'flex-start', 
-    paddingTop: 70,
+      backgroundColor: '#f1f1f1',
+      alignItems: 'center',
+      justifyContent: 'flex-start', 
+      paddingTop: 70,
     },
     logo: {
       width: 100, 
       height: 100,
-      marginBottom: 20, // Espacio entre el logo y el título
+      marginBottom: 20,
     },
     titulo: {
       fontSize: 55,
@@ -80,8 +84,8 @@ const styles = StyleSheet.create({
       fontFamily: 'System'
     },
     inputContainer: {
-      flexDirection: 'row',  // Alinea el icono y el input en fila
-      alignItems: 'center',  // Alinea verticalmente al centro
+      flexDirection: 'row',
+      alignItems: 'center',
       borderColor: 'gray',
       borderWidth: 1,
       borderRadius: 30,
@@ -92,10 +96,9 @@ const styles = StyleSheet.create({
       marginTop: 20,
     },
     icon: {
-      marginRight: 10,  // Añade espacio entre el icono y el TextInput
+      marginRight: 10,
     },
     texto_inputs: {
-      //borderWidth: 1,
       flex: 1,
       paddingHorizontal: 10,
       textAlign: 'center',
@@ -108,7 +111,7 @@ const styles = StyleSheet.create({
       color: 'gray',
       marginTop: 20,
     },
-    boton : {
+    boton: {
       width: 180,
       height: 40,
       borderRadius: 20,
@@ -119,4 +122,3 @@ const styles = StyleSheet.create({
       marginTop: 30
     },
 });
-  
