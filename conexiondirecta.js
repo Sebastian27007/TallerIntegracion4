@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const cors = require('cors'); // Para permitir el acceso desde el frontend
 
 const app = express();
-const port = 3306;
+const port = 3000; // Cambiamos el puerto a 3000 para evitar conflictos
 
 app.use(cors()); // Permitir peticiones desde otros orígenes
 
@@ -13,6 +13,15 @@ const connection = mysql.createConnection({
   user: 'sebastian',
   password: 'seba',
   database: 'getmed',
+});
+
+// Conectar a la base de datos
+connection.connect((err) => {
+  if (err) {
+    console.error('Error al conectar con la base de datos:', err);
+    return;
+  }
+  console.log('Conexión exitosa a la base de datos');
 });
 
 // Rutas para consultar cada tabla
@@ -39,9 +48,21 @@ app.get('/horario', (req, res) => {
   });
 });
 
-// Consultar 'medico'
+// Consultar 'medico' con su especialidad
 app.get('/medico', (req, res) => {
-  connection.query('SELECT * FROM medico', (err, results) => {
+  const query = `
+    SELECT 
+      medico.ID_Medic, 
+      medico.Nom_medic, 
+      medico.Apelli_medic, 
+      especialidad.Nom_espe 
+    FROM 
+      medico 
+    JOIN 
+      especialidad ON medico.ID_Especialidad = especialidad.ID_Especialidad
+  `;
+
+  connection.query(query, (err, results) => {
     if (err) {
       res.status(500).send('Error en la base de datos');
       return;

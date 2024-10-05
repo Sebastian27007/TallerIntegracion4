@@ -1,36 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
-import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Picker } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import axios from 'axios';
-import Tablas from './tablas'; // Ensure this import is correct
 
 const TablasComponent = () => {
   const [especialidades, setEspecialidades] = useState([]);
-  const [horarios, setHorarios] = useState([]);
   const [medicos, setMedicos] = useState([]);
-  const [notificaciones, setNotificaciones] = useState([]);
-  const [reservas, setReservas] = useState([]);
-  const [usuarios, setUsuarios] = useState([]);
+  const [selectedEspecialidad, setSelectedEspecialidad] = useState(null);
+  const [filteredMedicos, setFilteredMedicos] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [especialidadesRes, horariosRes, medicosRes, notificacionesRes, reservasRes, usuariosRes] = await Promise.all([
-          axios.get('http://localhost:3306/especialidad'),
-          axios.get('http://localhost:3306/horario'),
-          axios.get('http://localhost:3306/medico'),
-          axios.get('http://localhost:3306/notificacion'),
-          axios.get('http://localhost:3306/reserva'),
-          axios.get('http://localhost:3306/usuario'),
+        const [especialidadesRes, medicosRes] = await Promise.all([
+          axios.get('http://localhost:3000/especialidad'),
+          axios.get('http://localhost:3000/medico'),
         ]);
 
         setEspecialidades(especialidadesRes.data);
-        setHorarios(horariosRes.data);
         setMedicos(medicosRes.data);
-        setNotificaciones(notificacionesRes.data);
-        setReservas(reservasRes.data);
-        setUsuarios(usuariosRes.data);
+        setFilteredMedicos(medicosRes.data); // Muestra todos los médicos inicialmente
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -39,131 +29,93 @@ const TablasComponent = () => {
     fetchData();
   }, []);
 
+  // Filtra médicos según la especialidad seleccionada
+  useEffect(() => {
+    if (selectedEspecialidad) {
+      console.log('Especialidad seleccionada (ID):', selectedEspecialidad);
+      const filtered = medicos.filter(
+        (medico) => medico.ID_Especialidad === selectedEspecialidad
+      );
+      setFilteredMedicos(filtered);
+      console.log('Médicos filtrados:', filtered);
+    } else {
+      setFilteredMedicos(medicos); // Mostrar todos los médicos si no hay filtro
+    }
+  }, [selectedEspecialidad, medicos]);
+
   return (
     <PaperProvider>
-      <ScrollView>
-        <View>
-          {/* Encabezado y tabla de Especialidades */}
-          <Text style={styles.tableTitle}>Especialidades</Text>
-          <DataTable style={styles.especialidadesTable}>
-            <DataTable.Header>
-              <DataTable.Title textStyle={styles.tableHeaderText}>ID</DataTable.Title>
-              <DataTable.Title textStyle={styles.tableHeaderText}>Nombre Especialidad</DataTable.Title>
-            </DataTable.Header>
-            {especialidades.map(item => (
-              <DataTable.Row key={item.ID_Especialidad}>
-                <DataTable.Cell textStyle={styles.tableCellText}>{item.ID_Especialidad}</DataTable.Cell>
-                <DataTable.Cell textStyle={styles.tableCellText}>{item.Nom_espe}</DataTable.Cell>
-              </DataTable.Row>
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          <Text style={styles.tableTitle}>Seleccionar Especialidad</Text>
+          <Picker
+            selectedValue={selectedEspecialidad}
+            onValueChange={(itemValue) => setSelectedEspecialidad(itemValue)}
+            style={styles.picker}
+          >
+            <Picker.Item label="Todas las especialidades" value={null} />
+            {especialidades.map((espe) => (
+              <Picker.Item key={espe.ID_Especialidad} label={espe.Nom_espe} value={espe.ID_Especialidad} />
             ))}
-          </DataTable>
+          </Picker>
 
-          {/* Encabezado y tabla de Horarios */}
-          <Text style={styles.tableTitle}>Horarios</Text>
-          <DataTable style={styles.horariosTable}>
-            <DataTable.Header>
-              <DataTable.Title textStyle={styles.tableHeaderText}>ID</DataTable.Title>
-              <DataTable.Title textStyle={styles.tableHeaderText}>Fecha y Hora</DataTable.Title>
-            </DataTable.Header>
-            {horarios.map(item => (
-              <DataTable.Row key={item.ID_Horario}>
-                <DataTable.Cell textStyle={styles.tableCellText}>{item.ID_Horario}</DataTable.Cell>
-                <DataTable.Cell textStyle={styles.tableCellText}>{item.FechaHora}</DataTable.Cell>
-              </DataTable.Row>
-            ))}
-          </DataTable>
-
-          {/* Encabezado y tabla de Médicos */}
+          {/* Tabla de Médicos filtrados */}
           <Text style={styles.tableTitle}>Médicos</Text>
           <DataTable style={styles.medicosTable}>
             <DataTable.Header>
               <DataTable.Title textStyle={styles.tableHeaderText}>ID</DataTable.Title>
               <DataTable.Title textStyle={styles.tableHeaderText}>Nombre Médico</DataTable.Title>
+              <DataTable.Title textStyle={styles.tableHeaderText}>Apellido Médico</DataTable.Title>
             </DataTable.Header>
-            {medicos.map(item => (
-              <DataTable.Row key={item.ID_Medic}>
-                <DataTable.Cell textStyle={styles.tableCellText}>{item.ID_Medic}</DataTable.Cell>
-                <DataTable.Cell textStyle={styles.tableCellText}>{item.Nom_medic}</DataTable.Cell>
+            {filteredMedicos.length === 0 ? (
+              <DataTable.Row>
+                <DataTable.Cell textStyle={styles.tableCellText} colSpan={3}>
+                  No hay médicos disponibles.
+                </DataTable.Cell>
               </DataTable.Row>
-            ))}
+            ) : (
+              filteredMedicos.map((medico) => (
+                <DataTable.Row key={medico.ID_Medic}>
+                  <DataTable.Cell textStyle={styles.tableCellText}>{medico.ID_Medic}</DataTable.Cell>
+                  <DataTable.Cell textStyle={styles.tableCellText}>{medico.Nom_medic}</DataTable.Cell>
+                  <DataTable.Cell textStyle={styles.tableCellText}>{medico.Apelli_medic}</DataTable.Cell>
+                </DataTable.Row>
+              ))
+            )}
           </DataTable>
-
-          {/* Encabezado y tabla de Notificaciones */}
-          <Text style={styles.tableTitle}>Notificaciones</Text>
-          <DataTable style={styles.notificacionesTable}>
-            <DataTable.Header>
-              <DataTable.Title textStyle={styles.tableHeaderText}>ID</DataTable.Title>
-              <DataTable.Title textStyle={styles.tableHeaderText}>Notificación</DataTable.Title>
-            </DataTable.Header>
-            {notificaciones.map(item => (
-              <DataTable.Row key={item.ID_Notificacion}>
-                <DataTable.Cell textStyle={styles.tableCellText}>{item.ID_Notificacion}</DataTable.Cell>
-                <DataTable.Cell textStyle={styles.tableCellText}>{item.Mensaje}</DataTable.Cell>
-              </DataTable.Row>
-            ))}
-          </DataTable>
-
-          {/* Encabezado y tabla de Reservas */}
-          <Text style={styles.tableTitle}>Reservas</Text>
-          <DataTable style={styles.reservasTable}>
-            <DataTable.Header>
-              <DataTable.Title textStyle={styles.tableHeaderText}>ID</DataTable.Title>
-              <DataTable.Title textStyle={styles.tableHeaderText}>ID Usuario</DataTable.Title>
-            </DataTable.Header>
-            {reservas.map(item => (
-              <DataTable.Row key={item.ID_Reserva}>
-                <DataTable.Cell textStyle={styles.tableCellText}>{item.ID_Reserva}</DataTable.Cell>
-                <DataTable.Cell textStyle={styles.tableCellText}>{item.ID_Usuario}</DataTable.Cell>
-              </DataTable.Row>
-            ))}
-          </DataTable>
-
-          {/* Encabezado y tabla de Usuarios */}
-          <Text style={styles.tableTitle}>Usuarios</Text>
-          <DataTable style={styles.usuariosTable}>
-            <DataTable.Header>
-              <DataTable.Title textStyle={styles.tableHeaderText}>ID</DataTable.Title>
-              <DataTable.Title textStyle={styles.tableHeaderText}>Nombre Usuario</DataTable.Title>
-            </DataTable.Header>
-            {usuarios.map(item => (
-              <DataTable.Row key={item.ID_Usuario}>
-                <DataTable.Cell textStyle={styles.tableCellText}>{item.ID_Usuario}</DataTable.Cell>
-                <DataTable.Cell textStyle={styles.tableCellText}>{item.Nombre}</DataTable.Cell>
-              </DataTable.Row>
-            ))}
-          </DataTable>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </PaperProvider>
   );
 };
 
-export default TablasComponent; // Export the renamed component
+export default TablasComponent;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#FFFFFF',
+  },
+  scrollViewContent: {
+    paddingBottom: 20,
+  },
   tableTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     marginVertical: 10,
     textAlign: 'center',
-  },
-  especialidadesTable: {
-    backgroundColor: '#FFEBEE',
-  },
-  horariosTable: {
-    backgroundColor: '#E3F2FD',
+    color: '#424242',
   },
   medicosTable: {
     backgroundColor: '#E8F5E9',
+    marginBottom: 20,
   },
-  notificacionesTable: {
-    backgroundColor: '#FFF3E0',
-  },
-  reservasTable: {
-    backgroundColor: '#F3E5F5',
-  },
-  usuariosTable: {
-    backgroundColor: '#E0F7FA',
+  picker: {
+    height: 50,
+    width: '100%',
+    backgroundColor: '#f0f0f0',
+    marginBottom: 20,
   },
   tableHeaderText: {
     color: '#424242',
