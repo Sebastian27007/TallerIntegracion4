@@ -3,8 +3,9 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import axios from 'axios';
+import Tablas from './tablas'; // Ensure this import is correct
 
-const Tablas = () => {
+const TablasComponent = () => {
   const [especialidades, setEspecialidades] = useState([]);
   const [horarios, setHorarios] = useState([]);
   const [medicos, setMedicos] = useState([]);
@@ -42,7 +43,6 @@ const Tablas = () => {
     <PaperProvider>
       <ScrollView>
         <View>
-
           {/* Encabezado y tabla de Especialidades */}
           <Text style={styles.tableTitle}>Especialidades</Text>
           <DataTable style={styles.especialidadesTable}>
@@ -132,14 +132,13 @@ const Tablas = () => {
               </DataTable.Row>
             ))}
           </DataTable>
-
         </View>
       </ScrollView>
     </PaperProvider>
   );
 };
 
-export default Tablas;
+export default TablasComponent; // Export the renamed component
 
 const styles = StyleSheet.create({
   tableTitle: {
