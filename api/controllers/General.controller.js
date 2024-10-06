@@ -145,49 +145,6 @@ exports.eliminarReservaDinamica = async (req, res) => {
     });
   }
 };
-
-//Funcion para añadir un usuario
-exports.nuevoUsuario = async (req, res) => {
-  try {
-    // Obtener una conexión del pool
-    const connection = await pool.getConnection();
-
-    const { ID_User, rut, Contraseña } = req.body;
-
-    // Validar que los campos obligatorios estén presentes
-    if (!ID_User || !rut || !Contraseña) {
-      return res.status(400).json({ error: 'Faltan campos obligatorios' });
-    } 
-
-    // Consulta SQL para insertar la reserva
-    const query = `
-      INSERT INTO usuario (ID_User, rut, Contraseña) 
-      VALUES (?, ?, ?)
-    `;
-
-    // Ejecutar la consulta
-    const result = await connection.query(query, [ID_User, rut, Contraseña]);
-
-    const hashPassword = bcrypt.hashSync(Contraseña, 10);
-    // Responder con los datos de la reserva creada
-    res.status(201).json({
-      message: 'Usuario creado exitosamente',
-      data: {
-        ID_User: ID_User,
-        rut: rut,
-        Contraseña: hashPassword
-      }
-    });
-
-    // Liberar la conexión
-    connection.release();
-  } catch (err) {
-    // Manejo de errores
-    res.status(500).send({
-      message: err.message || 'Error al insertar la reserva.'
-    });
-  }
-};
 //Funcion para eliminar un usuario
 exports.eliminarUsuario = async (req, res) => {
   try {
@@ -238,7 +195,7 @@ exports.SolicitarcambioHora = async (req, res) => {
 };
 
 //logeo
-exports.InicioSesion = async (req, res) => {
+exports.IniciarSesion = async (req, res) => {
   const { rut, Contraseña } = req.body;
   try{
       const connection = await pool.getConnection();

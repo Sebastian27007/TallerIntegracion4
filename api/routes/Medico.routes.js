@@ -3,25 +3,26 @@ const express = require('express');
 const router = express.Router();
 const medico = require('../controllers/General.controller');
 const { crearReserva } = require('../controllers/General.controller');
-//const Inicio = require('../controllers/login.controller')
-
+const Login = require('../controllers/login.controller')
+const Register = require('../controllers/Register.controller')
+const verifyToken = require('../middlewares/auth.middlewares')
 // Ruta para obtener médicos con especialidad
 router.get('/medicos', medico.findMedicosWithEspecialidad);
 
 router.get('/reserva', medico.findHorariosWithReservas);
 
-router.post('/reservarhora', crearReserva)
+router.post('/reservarhora',verifyToken.authenticateToken, crearReserva)
 
-router.delete('/borrarhora', medico.eliminarReservaDinamica);
+router.delete('/borrarhora',verifyToken.authenticateToken, medico.eliminarReservaDinamica);
 
-router.post('/nuevoUsuario', medico.nuevoUsuario);
+router.delete('/eliminarUsuario',verifyToken.authenticateToken, medico.eliminarUsuario);
 
-router.delete('/eliminarUsuario', medico.eliminarUsuario);
+router.put('/actualizarCredenciales',verifyToken.authenticateToken, medico.actualizarCredenciales);
 
-router.put('/actualizarCredenciales', medico.actualizarCredenciales);
+router.put('/CambiodeHora', verifyToken.authenticateToken, medico.SolicitarcambioHora);
 
-router.put('/CambiodeHora', medico.SolicitarcambioHora);
+router.post('/login', Login.InicioSesion);
 
-router.post('login', medico.InicioSesion);
+router.post('/register', Register.nuevoUsuario)
 
 module.exports = router;
