@@ -40,11 +40,6 @@ export default function Login({ navigation }) {
           <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate('Navigation')}>
             <Text style={{fontSize: 17, fontWeight: '400', color: 'grey', fontFamily: 'System',}}>Ingresar</Text>
           </TouchableOpacity>
-          
-          {/* New button to navigate to Tablas */}
-          <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate('Tablas')}>
-            <Text style={{fontSize: 17, fontWeight: '400', color: 'grey', fontFamily: 'System',}}>Ir a Tablas</Text>
-          </TouchableOpacity>
         </View>
       </View>
     );

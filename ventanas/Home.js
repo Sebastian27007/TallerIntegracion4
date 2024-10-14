@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Home = () => {
@@ -16,24 +15,32 @@ const Home = () => {
 
         <View style={styles.menuContainer}>
           <TouchableOpacity 
-          style = {styles.menuButton}
-          onPress={() => navigation.navigate('Citas medicas agendadas')}>
+            style = {styles.menuButton}
+            onPress={() => navigation.navigate('Citas medicas agendadas')}>
             <Icon name='calendar' size={40} color={"white"} />
             <Text style = {styles.menuText}>Citas</Text>
           </TouchableOpacity>
 
           <TouchableOpacity 
-          style = {styles.menuButton}
-          onPress={() => navigation.navigate('Reprogramar horas agendadas')}>
+            style = {styles.menuButton}
+            onPress={() => navigation.navigate('Reprogramar horas agendadas')}>
             <Icon name='clock-o' size={40} color={"white"} />
             <Text style= {styles.menuText}>Reprogramar</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-          style = {styles.menuButton}
-          onPress={() => navigation.navigate('Cancelar hora medica agendada')}>
+            style = {styles.menuButton}
+            onPress={() => navigation.navigate('Cancelar hora medica agendada')}>
             <Icon name='times-circle' size={40} color={"white"} />
             <Text style= {styles.menuText}>Cancelar</Text>
+          </TouchableOpacity>
+
+          {/* Nuevo botón para tablas.js */}
+          <TouchableOpacity
+            style={styles.menuButton}
+            onPress={() => navigation.navigate('Tablas')}>
+            <Icon name='table' size={40} color={"white"} />
+            <Text style={styles.menuText}>Selección de especialidades </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -41,7 +48,6 @@ const Home = () => {
       <View style= {styles.bottomContainer}>
         <Text style={styles.tipText}>{tips}</Text>
       </View>
-
     </View>
   );
 }

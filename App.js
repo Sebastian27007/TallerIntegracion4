@@ -6,8 +6,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import RecuperarClave from './ventanas/RecuperarClave';
 import Login from './ventanas/Login';
 import CrearCuenta from './ventanas/CrearCuenta';
-import TablasComponent from './tablas';
+import TablasComponent from './ventanas/tablas';
 import Navigation from './Navigation';
+
 
 const Stack = createStackNavigator();
 
