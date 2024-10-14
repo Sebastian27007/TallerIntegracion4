@@ -6,6 +6,7 @@ const app = express();
 const port = 3306;
 
 app.use(cors()); // Permitir peticiones desde otros orígenes
+app.use(express.json()); // Middleware para analizar el cuerpo de las solicitudes JSON
 
 // Configuración de la base de datos
 const connection = mysql.createConnection({
@@ -73,8 +74,18 @@ app.get('/reserva', (req, res) => {
 });
 
 // Consultar 'usuario'
-app.get('/usuario', (req, res) => {
-  connection.query('SELECT * FROM usuario', (err, results) => {
+app.post('/usuario', (req, res) => {
+  const { rut, password } = req.body;
+
+  //Verificamos si se proporcionaron los campos necesarios
+  if (!rut || !password) {
+    res.status(400).send('Proporciona todos los datos necesarios');
+    return;
+  }
+
+  //Insertamos un nuevo usuario a la base de datos
+  const query = 'INSERT INTO usuario (rut, contraseña) VALUES (?, ?)';
+  connection.query(query, [rut, password], (err, results) => {
     if (err) {
       res.status(500).send('Error en la base de datos');
       return;
