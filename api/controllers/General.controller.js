@@ -187,11 +187,58 @@ exports.eliminarUsuario = async (req, res) => {
 
 // actualizar credenciales
 exports.actualizarCredenciales = async (req, res) => {
-  
+  const { rut, nuevaContraseña } = req.body;
+
+    // Verificar que el rut y la nueva contraseña estén presentes
+    if (!rut || !nuevaContraseña) {
+        return res.status(400).json({ message: 'Faltan campos obligatorios' });
+    }
+
+    try {
+        // Buscar al usuario en la base de datos
+        const [user] = await pool.query('SELECT * FROM usuarios WHERE rut = ?', [rut]);
+
+        // Verificar si el usuario existe
+        if (user.length === 0) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        // Hashear la nueva contraseña
+        const hashPassword = await bcrypt.hash(nuevaContraseña, 10);
+
+        // Actualizar la contraseña en la base de datos
+        await pool.query('UPDATE usuarios SET Contraseña = ? WHERE rut = ?', [hashPassword, rut]);
+
+        res.json({ message: 'Credenciales actualizadas exitosamente' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error al actualizar credenciales', error: error.message });
+    }
 };
 // petición para realizar el cambio de hora
 exports.SolicitarcambioHora = async (req, res) => {
+  const { ID_Reserva } = req.params;
+  const { ID_Horario } = req.body;
 
+  // Validar que se proporcionen los datos necesarios
+  if (!ID_Horario || !ID_Reserva) {
+      return res.status(400).json({ message: 'ID de la reserva y nuevo horario son obligatorios' });
+  }
+
+  try {
+      // Verificar si la reserva existe
+      const [reserva] = await pool.query('SELECT * FROM reserva WHERE ID_Reserva = ?', [ID_Reserva]);
+
+      if (reserva.length === 0) {
+          return res.status(404).json({ message: 'Reserva no encontrada' });
+      }
+
+      // Actualizar el horario de la reserva
+      await pool.query('UPDATE reserva SET ID_Horario = ? WHERE ID_Reserva = ?', [ID_Horario, ID_Reserva]);
+
+      res.json({ message: 'Horario actualizado exitosamente' });
+  } catch (error) {
+      res.status(500).json({ message: 'Error al actualizar el horario', error: error.message });
+  }
 };
 
 //logeo
