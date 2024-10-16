@@ -4,6 +4,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const db = require('./db_config/config');
 const medico = require('./routes/Medico.routes')
+const usuario = require('./routes/usuario.routes'); // Importar rutas de usuarios
 const { authenticateToken } = require('./middlewares/auth.middlewares');
 // Middleware
 app.use(express.json());
@@ -14,13 +15,15 @@ app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-app.use('/api/users', require('./routes/user.routes'));
+//app.use('/api/users', require('./routes/user.routes'));
 
 // Rutas de asesores (testeo local)
 app.use('/api/asesores', require('./routes/asesor.routes'));
 
 app.use('/auth', medico);
 
+// Registrar rutas de usuarios correctamente
+app.use('/api/usuarios', usuario); // Usar correctamente el prefijo '/api/usuarios'
 
 // Rutas protegidas (ejemplo)
 app.get('/protected', authenticateToken, (req, res) => {

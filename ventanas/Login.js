@@ -1,16 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 import { StatusBar } from "expo-status-bar";
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Modal } from "react-native-web";
 
 export default function Login({ navigation }) {
+  const [rut, setRut] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [errorMessage, setErroMessage] = useState('');
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('', {
+        method: 'POST',
+        header: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({rut, password}),
+      });
+
+      if (AuthenticatorResponse.status === 200 ){
+        //Inicio de sesión exitoso
+        const data = await response.json()
+        const rutUsuario = data.rut
+        navigation.navigate('Inicio', {rut: rutUsuario});
+      } else {
+        setErrorModalVisible(true);
+        setErroMessage('Los datos incorrectos. Intentalo nuevamente');
+      }
+    } catch (error) {
+      console.error('Error en el inicio de sesión:', error);
+    }
+  };
+
     return (
       <View style={styles.container}>
         <View style={styles.upperSection}>
           <Image source={require('../logo.png')} style={styles.logo} />
           <Text style={styles.titulo}>Bienvenido</Text>
         </View>
-
+        
         <View style={styles.lowerSection}>
           <Text style={styles.subtitulo}>Accede a tu cuenta</Text>
           <View style={styles.inputContainer}>
@@ -18,6 +47,7 @@ export default function Login({ navigation }) {
             <TextInput 
               placeholder='usuario@gmail.com'
               style={styles.texto_inputs}
+              onChangeText={setRut}
             />
           </View>
 
@@ -27,8 +57,32 @@ export default function Login({ navigation }) {
               placeholder='contraseña'
               style={styles.texto_inputs}
               secureTextEntry={true}
+              onChangeText={setPassword}
             />
           </View>
+
+          <Modal
+            visible={errorModalVisible}
+            animationType="slide"
+            transparent={true}
+            onRequestClose={() => setErrorModalVisible(false)}
+          >
+            <View style={styles.errorModal}>
+              <View style={styles.errorModalContent}>
+                <Text style={styles.errorText}>
+                  {errorMessage}
+                </Text>
+                <TouchableOpacity
+                  style={styles.errorButton}
+                  onPress={() => setErrorModalVisible(false)}
+                >
+                  <Text style={styles.errorButtonText}>
+                    Cerrar
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
 
           <TouchableOpacity onPress={() => navigation.navigate('RecuperarClave')}>
             <Text style={styles.olvidaste_contraseña}>Olvidaste tu contraseña</Text>
@@ -120,5 +174,31 @@ const styles = StyleSheet.create({
       marginVertical: 10,
       backgroundColor: 'white',
       marginTop: 30
+    },
+    errorModal: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'transparent',
+    },
+    errorModalContent: {
+      backgroundColor: 'white',
+      padding: 20,
+      borderRadius: 5,
+      alignItems: 'center',
+    },
+    errorText: {
+      fontSize: 18,
+      marginBottom: 20,
+    },
+    errorButton: {
+      backgroundColor: '#00ADB5',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    },
+    errorButtonText: {
+      fontSize: 18,
+      color: 'white',
     },
 });
