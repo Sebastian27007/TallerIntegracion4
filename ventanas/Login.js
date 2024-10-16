@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 import { StatusBar } from "expo-status-bar";
+import AntDesign from '@expo/vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Modal } from "react-native-web";
 
@@ -8,7 +9,8 @@ export default function Login({ navigation }) {
   const [rut, setRut] = useState('');
   const [password, setPassword] = useState('');
   const [errorModalVisible, setErrorModalVisible] = useState(false);
-  const [errorMessage, setErroMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
   const handleLogin = async () => {
     try {
       const response = await fetch('', {
@@ -16,20 +18,29 @@ export default function Login({ navigation }) {
         header: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({rut, password}),
+        body: JSON.stringify({rut, Contraseña: password}),
       });
 
       if (AuthenticatorResponse.status === 200 ){
         //Inicio de sesión exitoso
-        const data = await response.json()
-        const rutUsuario = data.rut
+        const data = await response.json();
+        const token = data.token; // Obtenemos el token desde la respuesta del backend
+
+        //Almacenamos el token en un lugar seguro por si más adelante lo ocupamos
+        await AsyncStorage.setItem('token', token);
+
+        //Navegamos a la pantalla de inicio pasando el rut del usuario
+        const rutUsuario = data.rut;
         navigation.navigate('Inicio', {rut: rutUsuario});
       } else {
+        //Mostramos un mensaje de error si la autenticación falla
         setErrorModalVisible(true);
-        setErroMessage('Los datos incorrectos. Intentalo nuevamente');
+        setErrorMessage('Los datos incorrectos. Intentalo nuevamente');
       }
     } catch (error) {
       console.error('Error en el inicio de sesión:', error);
+      setErrorModalVisible(true);
+      setErrorMessage('Ocurrió un error en el servidor. Inténtalo más tarde.');
     }
   };
 
@@ -43,11 +54,12 @@ export default function Login({ navigation }) {
         <View style={styles.lowerSection}>
           <Text style={styles.subtitulo}>Accede a tu cuenta</Text>
           <View style={styles.inputContainer}>
-            <Icon name="mail-outline" size={24} color="gray" style={styles.icon} />
+            <AntDesign name="user" size={24} color="gray" />
             <TextInput 
-              placeholder='usuario@gmail.com'
+              placeholder='RUT'
               style={styles.texto_inputs}
               onChangeText={setRut}
+              value={rut}
             />
           </View>
 
@@ -58,6 +70,7 @@ export default function Login({ navigation }) {
               style={styles.texto_inputs}
               secureTextEntry={true}
               onChangeText={setPassword}
+              value={password}
             />
           </View>
 
@@ -76,9 +89,7 @@ export default function Login({ navigation }) {
                   style={styles.errorButton}
                   onPress={() => setErrorModalVisible(false)}
                 >
-                  <Text style={styles.errorButtonText}>
-                    Cerrar
-                  </Text>
+                  <Text style={styles.errorButtonText}>Cerrar</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -95,10 +106,6 @@ export default function Login({ navigation }) {
             <Text style={{fontSize: 17, fontWeight: '400', color: 'grey', fontFamily: 'System',}}>Ingresar</Text>
           </TouchableOpacity>
           
-          {/* New button to navigate to Tablas */}
-          <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate('Tablas')}>
-            <Text style={{fontSize: 17, fontWeight: '400', color: 'grey', fontFamily: 'System',}}>Ir a Tablas</Text>
-          </TouchableOpacity>
         </View>
       </View>
     );

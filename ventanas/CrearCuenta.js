@@ -21,9 +21,9 @@ export default function CrearCuenta({ navigation }) {
     try {
 
       //Hacemos la petición al backend para el registro de los usuarios
-      const response = await axios.post('http://localhost:3000/api/usuario', {
+      const response = await axios.post('http://190.114.255.204:3306/api/usuarios/crear', {
         rut: rut,
-        password: password,
+        Contraseña: password,
       });
 
       //Mensaje existoso de registro
