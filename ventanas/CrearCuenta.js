@@ -21,13 +21,19 @@ export default function CrearCuenta({ navigation }) {
     try {
 
       //Hacemos la petición al backend para el registro de los usuarios
-      const response = await axios.post('http://190.114.255.204:3306/api/usuarios/crear', {
+      const response = await axios.post('http://190.114.255.204:3000/api/usuarios/crear', {
         rut: rut,
         Contraseña: password,
       });
 
+      // Verificamos el contenido de la respuesta
+      console.log(response.data) // Esto te ayudará a ver qué tipo de respuesta estás recibiendo
+
+      // Asegúrate de que response.data sea una cadena o extrae un mensaje específico si es necesario
+      const mensaje = typeof response.data === 'string' ? response.data : (response.data.message || 'Cuenta creada con éxito');
+
       //Mensaje existoso de registro
-      Alert.alert('Éxito', response.data);
+      Alert.alert('Éxito', mensaje);
 
       //Volver a la ventana Login
       navigation.goBack();

@@ -6,6 +6,11 @@ const db = require('./db_config/config');
 const medico = require('./routes/Medico.routes')
 const usuario = require('./routes/usuario.routes'); // Importar rutas de usuarios
 const { authenticateToken } = require('./middlewares/auth.middlewares');
+const cors = require('cors');
+
+// Habilitar CORS para todas las rutas
+app.use(cors());
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -23,7 +28,7 @@ app.use('/api/asesores', require('./routes/asesor.routes'));
 app.use('/auth', medico);
 
 // Registrar rutas de usuarios correctamente
-app.use('/api/usuarios', usuario); // Usar correctamente el prefijo '/api/usuarios'
+app.use('/api/usuarios', cors(), usuario); // Usar correctamente el prefijo '/api/usuarios'
 
 // Rutas protegidas (ejemplo)
 app.get('/protected', authenticateToken, (req, res) => {

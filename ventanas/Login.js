@@ -4,6 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Modal } from "react-native-web";
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 export default function Login({ navigation }) {
   const [rut, setRut] = useState('');
@@ -13,7 +14,7 @@ export default function Login({ navigation }) {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('', {
+      const response = await fetch('http://localhost:3000/api/usuarios/login', {
         method: 'POST',
         header: {
           'Content-Type': 'application/json',
