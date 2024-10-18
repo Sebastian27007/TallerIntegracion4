@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'reac
 import { StatusBar } from "expo-status-bar";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Modal } from "react-native-web";
+import { Modal } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
 export default function Login({ navigation }) {
@@ -21,6 +21,8 @@ export default function Login({ navigation }) {
         },
         body: JSON.stringify({rut, Contraseña: password}),
       });
+
+      console.log(response.status);  // Para depuración, imprime el código de estado
 
       if (response.status === 200 ){
         //Inicio de sesión exitoso
@@ -44,6 +46,11 @@ export default function Login({ navigation }) {
 
         //Navegamos a la pantalla de inicio pasando el rut del usuario
         navigation.navigate('MyTabs', {rut: rutUsuario});
+      } else if (response.status === 401 || response.status === 404) {
+        console.log('Credenciales incorrectas.')
+        // Datos incorrectos: RUT o contraseña no válidos
+        setErrorMessage('RUT o contraseña incorrectos. Inténtalo nuevamente.');
+        setErrorModalVisible(true);
       } else {
         //Mostramos un mensaje de error si la autenticación falla
         setErrorModalVisible(true);
