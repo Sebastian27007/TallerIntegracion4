@@ -112,7 +112,8 @@ exports.loginUsuario = async (req, res) => {
         // Responder con el token
         res.status(200).json({
             message: 'Inicio de sesión exitoso',
-            token: token
+            token: token,
+            rut: usuario.rut
         });
 
     } catch (err) {

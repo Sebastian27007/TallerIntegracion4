@@ -7,7 +7,7 @@ import RecuperarClave from './ventanas/RecuperarClave';
 import Login from './ventanas/Login';
 import CrearCuenta from './ventanas/CrearCuenta';
 import TablasComponent from './tablas';
-import Navigation from './Navigation';
+import MyTabs from './Navigation';
 
 const Stack = createStackNavigator();
 
@@ -26,8 +26,8 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen 
-          name="Navigation" 
-          component={Navigation} 
+          name="MyTabs" 
+          component={MyTabs} 
           options={{ headerShown: false }}
         />
         <Stack.Screen 

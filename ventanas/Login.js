@@ -14,25 +14,36 @@ export default function Login({ navigation }) {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/usuarios/login', {
+      const response = await fetch('http://190.114.255.204:3000/api/usuarios/login', {
         method: 'POST',
-        header: {
+        headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({rut, Contraseña: password}),
       });
 
-      if (AuthenticatorResponse.status === 200 ){
+      if (response.status === 200 ){
         //Inicio de sesión exitoso
         const data = await response.json();
+        console.log("Datos de respuesta:", data);
+
         const token = data.token; // Obtenemos el token desde la respuesta del backend
+        const rutUsuario = data.rut; // Definimos el rutUsuario
+
+        if (!rutUsuario || !token) {
+          // Si no se recibe el rut o el token, mostramos un error
+          console.error('El rut o el token no están definidos en la respuesta del servidor.');
+          setErrorModalVisible(true);
+          setErrorMessage('Error en la autenticación. Inténtalo de nuevo más tarde.');
+          return;
+        }
 
         //Almacenamos el token en un lugar seguro por si más adelante lo ocupamos
         await AsyncStorage.setItem('token', token);
+        await AsyncStorage.setItem('rut', rutUsuario);
 
         //Navegamos a la pantalla de inicio pasando el rut del usuario
-        const rutUsuario = data.rut;
-        navigation.navigate('Inicio', {rut: rutUsuario});
+        navigation.navigate('MyTabs', {rut: rutUsuario});
       } else {
         //Mostramos un mensaje de error si la autenticación falla
         setErrorModalVisible(true);
@@ -103,7 +114,7 @@ export default function Login({ navigation }) {
             <Text style={styles.olvidaste_contraseña}>¿No tienes una cuenta? Regístrate.</Text>
           </TouchableOpacity>
           <StatusBar style="auto" /> 
-          <TouchableOpacity style={styles.boton} onPress={() => navigation.navigate('Navigation')}>
+          <TouchableOpacity style={styles.boton} onPress={handleLogin}>
             <Text style={{fontSize: 17, fontWeight: '400', color: 'grey', fontFamily: 'System',}}>Ingresar</Text>
           </TouchableOpacity>
           

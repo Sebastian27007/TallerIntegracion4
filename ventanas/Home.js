@@ -37,7 +37,7 @@ const Home = () => {
     isAuthenticated ? (
       <View style={styles.container}>
         <View style={styles.topContainer}>
-          <Text style={styles.welcomeText}>Bienvenido {rutUsuario}</Text> {/* Mostramos el rut del usuario */}
+          <Text style={styles.welcomeText}>Bienvenido {rutUsuario}</Text> 
           <Text style={styles.subText}>Esperamos que tengas un excelente día.</Text>
 
           <View style={styles.menuContainer}>
@@ -45,22 +45,28 @@ const Home = () => {
             <TouchableOpacity
               style={styles.menuButton}
               onPress={() => navigation.navigate('Citas medicas agendadas')}>
-              <Icon name='calendar' size={40} color={"white"} />
-              <Text style={styles.menuText}>Citas</Text>
+              <View style={styles.iconWithText}>
+                <Icon name='calendar' size={40} color={"white"} />
+                <Text style={styles.menuText}>Citas</Text>
+              </View>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.menuButton}
               onPress={() => navigation.navigate('Reprogramas horas agendadas')}>
-              <Icon name='clock-o' size={40} color={"white"} />
-              <Text style={styles.menuText}>Reprogramar</Text>
+              <View style={styles.iconWithText}>
+                <Icon name='clock-o' size={40} color={"white"} />
+                <Text style={styles.menuText}>Reprogramar</Text>
+              </View>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.menuButton}
               onPress={() => navigation.navigate('Cancelar hora medica agendada')}>
-              <Icon name='times-circle' size={40} color={"white"} />
-              <Text style={styles.menuText}>Cancelar</Text>
+              <View style={styles.iconWithText}>
+                <Icon name='times-circle' size={40} color={"white"} />
+                <Text style={styles.menuText}>Cancelar</Text>
+              </View>
             </TouchableOpacity>
 
           </View>
@@ -110,6 +116,9 @@ const styles = StyleSheet.create({
   menuButton: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  iconWithText: {
+    alignItems: 'center', // Alinea icono y texto verticalmente
   },
   menuText: {
     color: 'white',
