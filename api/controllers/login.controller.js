@@ -22,15 +22,16 @@ exports.InicioSesion = async (req, res) => {
         }
 
         const token = jwt.sign(
-            { rut: user.rut }, 
-            process.env.SECRET_KEY, 
+            { rut: user.rut, id: user.id }, 
+            'mi_secreto', 
             { expiresIn: '1h' }
         );
-
-        // Mostrar el token en la consola para depuración
-        console.log("Token generado:", token);
-
-        res.json({ token });
+  
+        res.status(200).json({ 
+          message: 'Inicio de sesión exitoso',
+          token: token,
+          rut: user.rut
+         });
         connection.release();
 
     }catch{
