@@ -11,10 +11,10 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState('');
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
+  
   const handleLogin = async () => {
     try {
-      const response = await fetch('http://190.114.255.204:3000/api/usuarios/login', {
+      const response = await fetch('http://190.114.255.204:3000/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
