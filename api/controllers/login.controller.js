@@ -23,7 +23,7 @@ exports.InicioSesion = async (req, res) => {
 
         const token = jwt.sign(
             { rut: user.rut, id: user.id }, 
-            'mi_secreto', 
+            process.env.SECRET_KEY, 
             { expiresIn: '1h' }
         );
   

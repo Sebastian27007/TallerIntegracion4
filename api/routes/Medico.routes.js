@@ -16,9 +16,11 @@ router.post('/crearUsuario', usuarioController.nuevoUsuario);
 // Ruta para obtener médicos con especialidad
 router.get('/medicos', verifyToken.authenticateToken,medico.findMedicosWithEspecialidad);
 
-router.get('/reserva', verifyToken.authenticateToken,medico.findHorariosWithReservas);
+router.get('/usuario/:rut',verifyToken.authenticateToken, medico.getUserByRut);
 
-router.post('/reservarhora',verifyToken.authenticateToken, crearReserva)
+router.get('/reserva/:medicoId', verifyToken.authenticateToken,medico.findHorariosWithReservas);
+
+router.post('/reservarhora',verifyToken.authenticateToken, medico.crearReserva);
 
 router.delete('/borrarhora',verifyToken.authenticateToken, medico.eliminarReservaDinamica);
 
@@ -30,6 +32,6 @@ router.put('/CambiodeHora', verifyToken.authenticateToken, medico.Solicitarcambi
 
 router.post('/login', Login.InicioSesion);
 
-router.post('/register', Register.nuevoUsuario)
+router.post('/register', Register.nuevoUsuario);
 
 module.exports = router;
