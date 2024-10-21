@@ -54,7 +54,7 @@ export default function Login({ navigation }) {
       } else {
         //Mostramos un mensaje de error si la autenticación falla
         setErrorModalVisible(true);
-        setErrorMessage('Los datos incorrectos. Intentalo nuevamente');
+        setErrorMessage('Los datos ingresados son incorrectos. Inténtalo nuevamente.');
       }
     } catch (error) {
       console.error('Error en el inicio de sesión:', error);

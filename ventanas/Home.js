@@ -37,7 +37,8 @@ const Home = () => {
     isAuthenticated ? (
       <View style={styles.container}>
         <View style={styles.topContainer}>
-          <Text style={styles.welcomeText}>Bienvenido {rutUsuario}</Text> 
+          <Text style={styles.welcomeText}>Bienvenido</Text> 
+          <Text style={styles.rutText}>{rutUsuario}</Text>
           <Text style={styles.subText}>Esperamos que tengas un excelente día.</Text>
 
           <View style={styles.menuContainer}>
@@ -101,12 +102,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
+    fontFamily: 'System'
+  },
+  rutText: {  
+    fontSize: 18,
+    color: 'white',
+    marginTop: 10,
+    fontFamily: 'System',
   },
   subText: {
     fontSize: 16,
     color: 'white',
     marginBottom: 20,
     textAlign: 'center',
+    fontFamily: 'System',
   },
   menuContainer: {
     flexDirection: 'row',
@@ -124,6 +133,7 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: 8,
     fontSize: 14,
+    fontFamily: 'System',
   },
   bottomContainer: {
     flex: 2,
