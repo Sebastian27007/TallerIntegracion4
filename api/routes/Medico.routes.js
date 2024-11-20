@@ -3,25 +3,35 @@ const express = require('express');
 const router = express.Router();
 const medico = require('../controllers/General.controller');
 const { crearReserva } = require('../controllers/General.controller');
-//const Inicio = require('../controllers/login.controller')
+const Login = require('../controllers/login.controller')
+const Register = require('../controllers/Register.controller')
+const verifyToken = require('../middlewares/auth.middlewares')
+const usuarioController = require('../controllers/usuario.controllers');
 
+router.get('/obtenerUsuario', verifyToken.authenticateToken,usuarioController.obtenerUsuarios); // Obtener todos los usuarios
+
+router.post
+// Ruta para crear un nuevo usuario
+router.post('/crearUsuario', usuarioController.nuevoUsuario);
 // Ruta para obtener médicos con especialidad
-router.get('/medicos', medico.findMedicosWithEspecialidad);
+router.get('/medicos', verifyToken.authenticateToken,medico.findMedicosWithEspecialidad);
 
-router.get('/reserva', medico.findHorariosWithReservas);
+router.get('/usuario/:rut',verifyToken.authenticateToken, medico.getUserByRut);
 
-router.post('/reservarhora', crearReserva)
+router.get('/reserva/:medicoId', verifyToken.authenticateToken,medico.findHorariosWithReservas);
 
-router.delete('/borrarhora', medico.eliminarReservaDinamica);
+router.post('/reservarhora',verifyToken.authenticateToken, medico.crearReserva);
 
-router.post('/nuevoUsuario', medico.nuevoUsuario);
+router.delete('/borrarhora',verifyToken.authenticateToken, medico.eliminarReservaDinamica);
 
-router.delete('/eliminarUsuario', medico.eliminarUsuario);
+router.delete('/eliminarUsuario',verifyToken.authenticateToken, medico.eliminarUsuario);
 
-router.put('/actualizarCredenciales', medico.actualizarCredenciales);
+router.put('/updatePerfil',verifyToken.authenticateToken, medico.actualizarCredenciales);
 
-router.put('/CambiodeHora', medico.SolicitarcambioHora);
+router.put('/CambiodeHora', verifyToken.authenticateToken, medico.SolicitarcambioHora);
 
-router.post('login', medico.InicioSesion);
+router.post('/login', Login.InicioSesion);
+
+router.post('/register', Register.nuevoUsuario);
 
 module.exports = router;

@@ -4,13 +4,9 @@ const app = express();
 const port = process.env.PORT || 3000;
 const db = require('./db_config/config');
 const medico = require('./routes/Medico.routes')
-const usuario = require('./routes/usuario.routes'); // Importar rutas de usuarios
+const usuarios = require('./routes/usuario.routes')
 const { authenticateToken } = require('./middlewares/auth.middlewares');
 const cors = require('cors');
-
-// Habilitar CORS para todas las rutas
-app.use(cors());
-
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -20,16 +16,19 @@ app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-//app.use('/api/users', require('./routes/user.routes'));
-
+// Habilitar CORS para todas las solicitudes
+app.use(cors({
+  origin: 'https://190.114.255.204', // Aquí puedes especificar dominios permitidos, como 'http://tu-app.com/'
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: 'Content-Type,Authorization',
+  credentials: true // Si necesitas enviar cookies o autenticación
+}));
 // Rutas de asesores (testeo local)
 app.use('/api/asesores', require('./routes/asesor.routes'));
 
 app.use('/auth', medico);
 
-// Registrar rutas de usuarios correctamente
-app.use('/api/usuarios', cors(), usuario); // Usar correctamente el prefijo '/api/usuarios'
-
+app.use('/api/usuarios', usuarios);
 // Rutas protegidas (ejemplo)
 app.get('/protected', authenticateToken, (req, res) => {
   res.json({ message: `Bienvenido, tu RUT es: ${req.user.rut}` });

@@ -10,7 +10,7 @@ exports.InicioSesion = async (req, res) => {
         const connection = await pool.getConnection();
         const rows = await connection.query('SELECT * FROM usuario WHERE rut = ?', [rut]);
 
-        if (rows.lenght == 0){
+        if (rows.length == 0){
             return res.status(400).json({message: 'Usuario no encontrado'})
         }
         
@@ -22,16 +22,21 @@ exports.InicioSesion = async (req, res) => {
         }
 
         const token = jwt.sign(
-            { rut: user.rut }, 
-            'mi_secreto', 
+            { rut: user.rut, id: user.id }, 
+            process.env.SECRET_KEY, 
             { expiresIn: '1h' }
         );
-
-        res.json({ token });
-        conn.end();
+  
+        res.status(200).json({ 
+          message: 'Inicio de sesión exitoso',
+          token: token,
+          rut: user.rut
+         });
+        connection.release();
 
     }catch{
         console.error(error);
         res.status(500).json({ message: 'Error del servidor' });
     }
 };
+

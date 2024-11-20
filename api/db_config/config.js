@@ -7,7 +7,7 @@ const pool = mariadb.createPool({
   user: process.env.DB_USER, // Tu usuario
   password: process.env.DB_PASSWORD, // Tu contraseña
   database: process.env.DB_NAME, // Nombre de la base de datos
-  connectionLimit: 8 // Límite de conexiones
+  connectionLimit: 20 // Límite de conexiones
 });
 
 module.exports = pool;

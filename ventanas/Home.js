@@ -75,6 +75,19 @@ const Home = () => {
 
         <View style={styles.bottomContainer}>
           <Text style={styles.tipText}>{tips}</Text>
+          <TouchableOpacity
+          style = {styles.menuButton}
+          onPress={() => navigation.navigate('Cancelar hora medica agendada')}>
+            <Icon name='times-circle' size={40} color={"white"} />
+            <Text style= {styles.menuText}>Cancelar</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+          style = {styles.menuButton}
+          onPress={() => navigation.navigate('Preguntas frecuentes')}>
+            <Icon name='question-circle' size={40} color={"white"} />
+            <Text style= {styles.menuText}>Ayuda</Text>
+          </TouchableOpacity>
         </View>
       </View>
     ) : (

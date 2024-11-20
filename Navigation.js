@@ -13,7 +13,7 @@ import Solicitar from './ventanas/SolicitarHora';
 import CitasAgendadas from './ventanas/ST_CitasAgentadas';
 import ReprogramarHora from './ventanas/ST_ReprogramarHora';
 import Cancelar from './ventanas/ST_CancelarHoras';
-
+import Preguntas from './ventanas/Help.User';
 //STACK
 const HomeStackNavigator = createStackNavigator();
 
@@ -36,6 +36,10 @@ function MyStack() {
       <HomeStackNavigator.Screen
         name='Cancelar hora medica agendada'
         component={Cancelar}
+      />
+      <HomeStackNavigator.Screen
+        name='Preguntas frecuentes'
+        component={Preguntas}
       />
     </HomeStackNavigator.Navigator>
   )
