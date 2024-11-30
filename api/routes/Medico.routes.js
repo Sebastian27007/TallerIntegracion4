@@ -18,6 +18,8 @@ router.get('/medicos', verifyToken.authenticateToken,medico.findMedicosWithEspec
 
 router.get('/usuario/:rut',verifyToken.authenticateToken, medico.getUserByRut);
 
+router.get('/reservas/:userId', verifyToken.authenticateToken, medico.findReservasByUser);
+
 router.get('/reserva/:medicoId', verifyToken.authenticateToken,medico.findHorariosWithReservas);
 
 router.post('/reservarhora',verifyToken.authenticateToken, medico.crearReserva);

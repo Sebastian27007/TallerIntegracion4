@@ -313,3 +313,51 @@ exports.getUserByRut = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener el ID del usuario' });
   }
 };
+
+
+exports.findReservasByUser = async (req, res) => {
+  try {
+    // Obtener la conexión a la base de datos
+    const connection = await pool.getConnection();
+
+    // Obtener el ID del usuario desde los parámetros de la solicitud
+    const { userId } = req.params;
+
+    // Validar que se proporciona el ID del usuario
+    if (!userId) {
+      return res.status(400).json({ message: 'El ID del usuario es obligatorio.' });
+    }
+
+    // Consulta SQL para obtener las reservas del usuario junto con la información del médico y la especialidad
+    const query = 
+        `SELECT 
+        reserva.ID_Reserva,
+        horario.FechaHora,
+        medico.Nom_medic,
+        medico.Apelli_medic,
+        especialidad.Nom_espe
+          FROM reserva
+          INNER JOIN horario ON reserva.ID_Horario = horario.ID_Horario
+          INNER JOIN medico ON horario.ID_Medic = medico.ID_Medic
+          INNER JOIN especialidad ON especialidad.ID_Medic = medico.ID_Medic
+          WHERE reserva.ID_User = ? AND reserva.Cancelacion = false;`;
+
+    // Ejecutar la consulta
+    const rows = await connection.query(query, [userId]);
+
+    // Verificar si el usuario tiene reservas
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({ message: 'No se encontraron reservas para este usuario.' });
+    }
+
+    // Responder con los datos de las reservas
+    res.status(200).json(rows);
+
+    // Liberar la conexión a la base de datos
+    connection.release();
+  } catch (error) {
+    // Manejo de errores
+    console.error('Error al obtener las reservas del usuario:', error);
+    res.status(500).json({ message: 'Error al obtener las reservas del usuario', error: error.message });
+  }
+};
