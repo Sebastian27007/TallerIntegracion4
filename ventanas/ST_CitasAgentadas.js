@@ -1,36 +1,102 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CitasAgendadas = () => {
-  // Datos de ejemplo para las citas agendadas
-  const citas = [
-    { id: 1, medico: 'Dr. Juan Pérez', especialidad: 'Cardiología', fecha: '2024-12-01 10:00' },
-    { id: 2, medico: 'Dra. Ana García', especialidad: 'Dermatología', fecha: '2024-12-02 14:30' },
-    { id: 3, medico: 'Dr. Mario López', especialidad: 'Pediatría', fecha: '2024-12-03 09:00' },
-  ];
+  const [citas, setCitas] = useState([]); // Estado para almacenar las citas
+  const [loading, setLoading] = useState(true); // Estado para manejar el indicador de carga
+  const [error, setError] = useState(null); // Estado para manejar errores
 
+  // Función para obtener las citas agendadas desde el backend
+  const fetchCitasAgendadas = async () => {
+    try {
+      setLoading(true);
+
+      // Obtener el token y el RUT del usuario almacenados en AsyncStorage
+      const token = await AsyncStorage.getItem('token');
+      const rut = await AsyncStorage.getItem('rut');
+      console.log('Token:', token, 'RUT:', rut);
+
+      if (!token || !rut) {
+        setError('No se encontró el token o el RUT. Inicia sesión nuevamente.');
+        setLoading(false);
+        return;
+      }
+
+      // Obtener el ID del usuario utilizando el RUT
+      const userResponse = await fetch(`http://190.114.255.204:3000/auth/usuario/${rut}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (userResponse.status !== 200) {
+        setError('Error al obtener el ID del usuario.');
+        setLoading(false);
+        return;
+      }
+
+      const userData = await userResponse.json();
+      const userId = userData.ID_User;
+
+      // Obtener las citas agendadas del usuario
+      const citasResponse = await fetch(`http://190.114.255.204:3000/auth/reservas/${userId}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (citasResponse.status === 200) {
+        const citasData = await citasResponse.json();
+        setCitas(citasData);
+      } else if (citasResponse.status === 404) {
+        setCitas([]); // No hay citas para el usuario
+      } else {
+        setError('Error al obtener las citas agendadas.');
+      }
+    } catch (error) {
+      setError('Ocurrió un error al cargar las citas.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Efecto para cargar las citas al montar el componente
+  useEffect(() => {
+    fetchCitasAgendadas();
+  }, []);
+
+  // Renderizar cada cita
   const renderCita = ({ item }) => (
     <TouchableOpacity style={styles.citaItem}>
-      <Text style={styles.citaText}>Médico: {item.medico}</Text>
-      <Text style={styles.citaText}>Especialidad: {item.especialidad}</Text>
-      <Text style={styles.citaText}>Fecha: {item.fecha}</Text>
+      <Text style={styles.citaText}>Médico: {item.Nom_medic} {item.Apelli_medic}</Text>
+      <Text style={styles.citaText}>Especialidad: {item.Nom_espe}</Text>
+      <Text style={styles.citaText}>Fecha: {new Date(item.FechaHora).toLocaleString()}</Text>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      {/* Sección superior (2/6) */}
+      {/* Sección superior */}
       <View style={styles.topContainer}>
         <Text style={styles.title}>Citas Médicas Agendadas</Text>
-        <Text style={styles.subtitle}>Revisar tus próximas citas medicas</Text>
+        <Text style={styles.subtitle}>Revisar tus próximas citas médicas</Text>
       </View>
 
-      {/* Sección inferior (4/6) */}
+      {/* Sección inferior */}
       <View style={styles.bottomContainer}>
-        {citas.length > 0 ? (
+        {loading ? (
+          <ActivityIndicator size="large" color="#00796b" />
+        ) : error ? (
+          <Text style={styles.errorText}>{error}</Text>
+        ) : citas.length > 0 ? (
           <FlatList
             data={citas}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.ID_Reserva.toString()}
             renderItem={renderCita}
           />
         ) : (
@@ -46,7 +112,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8f8f8',
   },
-  /* Sección superior (2/6) */
+  /* Sección superior */
   topContainer: {
     flex: 1.3,
     backgroundColor: '#49daee',
@@ -59,16 +125,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
-    fontFamily: 'System',
   },
   subtitle: {
     fontSize: 16,
     color: 'white',
     marginTop: 10,
     textAlign: 'center',
-    fontFamily: 'System',
   },
-  /* Sección inferior (4/6) */
+  /* Sección inferior */
   bottomContainer: {
     flex: 4,
     justifyContent: 'center',
@@ -90,6 +154,12 @@ const styles = StyleSheet.create({
   noCitasText: {
     fontSize: 16,
     color: '#555',
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  errorText: {
+    fontSize: 16,
+    color: 'red',
     textAlign: 'center',
     marginTop: 10,
   },
